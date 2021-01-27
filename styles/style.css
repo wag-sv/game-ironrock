@@ -75,7 +75,7 @@ body {
 
 #gameArea {
     display: none;
-    background-image: url("../images/board2.png");
+    background-image: url("../images/board.png");
     background-repeat: no-repeat;
     background-size: cover;
     max-width: 800px;
