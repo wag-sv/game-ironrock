@@ -163,71 +163,101 @@ class Game {
     }
 
     drawNote = (note) => {    
-        
-        if (note.color === 'g') {
-            const matchGreen = this.checkMatch(note, this.greenBtnPress);
+        let matchGreen = false;
+        let matchRed = false;
+        let matchYellow = false;
+        let matchBlue = false;
+        let matchPink = false;
 
-            if(matchGreen) {
-                context.drawImage(this.match, 25, 265, 200, 200);
-            } else if (note.time >= 0){
+        if (note.color === 'g') {
+            if ((note.y + note.h) >= 440) {
+                matchGreen = this.checkMatch(this.greenBtnPress);
+
+                if(matchGreen) {
+                    context.drawImage(this.match, 25, 265, 200, 200);
+                }  
+            } else {
                 context.drawImage(this.greenNote, note.x, note.y, note.w, note.h);
-            }           
+            }        
         }
 
-        if (note.color === 'r') {    
-            const matchRed = this.checkMatch(note, this.redBtnPress);
+        if (note.color === 'r') {
+            if ((note.y + note.h) >= 440) {
+                matchRed = this.checkMatch(this.redBtnPress);
 
-            if(matchRed) {
-                context.drawImage(this.match, 165, 265, 200, 200);
-            } else if (note.time >= 0){
+                if(matchRed) {
+                    context.drawImage(this.match, 165, 265, 200, 200);
+                }  
+            } else {
                 context.drawImage(this.redNote, note.x, note.y, note.w, note.h);
-            }           
+            }       
         }
 
         if (note.color === 'y') {
-            const matchYellow = this.checkMatch(note, this.yellowBtnPress);
+            if ((note.y + note.h) >= 440) {
+                matchYellow = this.checkMatch(this.yellowBtnPress);
 
-            if(matchYellow) {
-                context.drawImage(this.match, 305, 265, 200, 200);
-            } else if (note.time >= 0){
+                if(matchYellow) {
+                    context.drawImage(this.match, 305, 265, 200, 200);
+                } 
+            } else {
                 context.drawImage(this.yellowNote, note.x, note.y, note.w, note.h);
-            }           
+            }       
         }
 
         if (note.color === 'b') {
-            const matchBlue = this.checkMatch(note, this.blueBtnPress);
+            if ((note.y + note.h) >= 440) {
+                matchBlue = this.checkMatch(this.blueBtnPress);
 
-            if(matchBlue) {
-                context.drawImage(this.match, 445, 265, 200, 200);
-            } else if (note.time >= 0){
+                if(matchBlue) {
+                    context.drawImage(this.match, 445, 265, 200, 200);
+                } 
+            } else {
                 context.drawImage(this.blueNote, note.x, note.y, note.w, note.h);
-            }  
+            }           
         }
 
-        if (note.color === 'p') {         
-            const matchPink = this.checkMatch(note, this.pinkBtnPress);
+        if (note.color === 'p') { 
+            if ((note.y + note.h) >= 440) {
+                matchPink = this.checkMatch(this.pinkBtnPress);
 
-            if(matchPink) {
-                context.drawImage(this.match, 585, 265, 200, 200);
-            } else if (note.time >= 0){
-                context.drawImage(this.blueNote, note.x, note.y, note.w, note.h);
-            } 
-            context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
+                if(matchPink) {
+                    context.drawImage(this.match, 585, 265, 200, 200);
+                } 
+            } else {
+                context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
+            }             
         }
 
+        // if(this.frames % 100 === 0) {
+        //     if(matchGreen || matchRed || matchYellow || matchBlue || matchPink){
+        //         this.guitar.volume = 1;
+        //     } else {
+        //         this.guitar.volume = 0;
+        //     }
+        // }        
+
+    }
+
+    checkMatch = (notePress) => {
+        if(notePress && this.pick) {
+            if(this.frames % 500 === 0) {
+                this.guitar.volume = 1;
+            }
+            
+            return true;
+        } else { 
+            if(this.frames % 500 === 0) {
+                this.guitar.volume = 0;
+            }                       
+            return false;
+        }
+
+        
     }
 
     clear = () =>  {
         context.clearRect(0, 0, canvas.width, canvas.height);
-    }
-
-    checkMatch = (note, notePress) => {
-        if(-0.2 < note.time && note.time < 0.2 && notePress && this.pick){ 
-
-            return true;
-        }
-        return false;
-        
     }
 
 
