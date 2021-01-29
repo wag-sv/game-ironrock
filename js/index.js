@@ -178,14 +178,6 @@ class Game {
                         
                 }
                 
-
-                // if(note.match) {
-                //     if(note.match === false){
-                //         note.match = true;
-                //         this.matches++;
-                //     }
-                //     context.drawImage(this.match, 25, 265, 200, 200);
-                // }  
             } else {
                 if ((note.y + note.h) < 420) {
                     context.drawImage(this.greenNote, note.x, note.y, note.w, note.h);
@@ -206,15 +198,7 @@ class Game {
                         context.drawImage(this.match, 165, 265, 200, 200);
                     }
                 }
-                    
-
-                // if(note.match) {
-                //     if(note.match === false){
-                //         note.match = true;
-                //         this.matches++;
-                //     }
-                //     context.drawImage(this.match, 165, 265, 200, 200);
-                // }  
+                      
             } else {
                 if ((note.y + note.h) < 420) {
                     context.drawImage(this.redNote, note.x, note.y, note.w, note.h);
@@ -236,14 +220,6 @@ class Game {
                     }
                 }
                 
-
-                // if(note.match) {
-                //     if(note.match === false){
-                //         note.match = true;
-                //         this.matches++;
-                //     }
-                //     context.drawImage(this.match, 305, 265, 200, 200);
-                // } 
             } else {
                 if ((note.y + note.h) < 420) {
                     context.drawImage(this.yellowNote, note.x, note.y, note.w, note.h);
@@ -265,15 +241,7 @@ class Game {
                     }
                     
                 }
-                
-
-                // if(note.match) {
-                //     if(note.match === false){
-                //         note.match = true;
-                //         this.matches++;
-                //     }
-                //     context.drawImage(this.match, 445, 265, 200, 200);
-                // } 
+                 
             } else {
                 if ((note.y + note.h) < 420) {
                     context.drawImage(this.blueNote, note.x, note.y, note.w, note.h);
@@ -296,14 +264,6 @@ class Game {
                     
                 }
                 
-
-                // if(note.match) {
-                //     if(note.match === false){
-                //         note.match = true;
-                //         this.matches++;
-                //     }
-                //     context.drawImage(this.match, 585, 265, 200, 200);
-                // } 
             } else {
                 if ((note.y + note.h) < 420) {
                     context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
@@ -315,29 +275,26 @@ class Game {
     }
 
     checkMatch = (notePress) => {
+        if (this.frames % 1000 === 0) {
+    
+            this.song.currentTime = this.frames/1000;
+            this.guitar.currentTime = this.frames/1000;
+        }
+
         if(notePress && this.pick) {
             
             this.guitar.volume = 1;
-            this.song.currentTime = this.frames/1000;
-            this.guitar.currentTime = this.frames/1000;
 
-            // if (this.frames % 100 === 0) {
-            //     this.guitar.volume = 1;
-            //     this.song.currentTime = this.frames/1000;
-            //     this.guitar.currentTime = this.frames/1000;
-            // }
-            
             return true;
+        
         } else {                 
 
             if(this.frames % 300 === 0) {                
                 this.guitar.volume = 0;
-                this.song.currentTime = this.frames/1000;
-                this.guitar.currentTime = this.frames/1000;
-            }                       
+            }             
+
             return false;
         }
-
         
     }
 
