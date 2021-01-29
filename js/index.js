@@ -1,14 +1,16 @@
 const song = "./songs/song.ogg"
 const guitar = "./songs/guitar.ogg"
 const jsonNotes = "./songs/notes.json"
+const noteError = "./songs/noteError.ogg"
 
 const canvas = document.getElementById("gameArea");
 const context = canvas.getContext("2d");
 
 class Game {
-    constructor (song, guitar, jsonNotes) {
+    constructor (song, guitar, jsonNotes, noteError) {
         this.song = new Audio(song);
         this.guitar = new Audio(guitar);
+        this.noteError = new Audio(noteError);
         this.jsonNotes = jsonNotes;
         this.notes = [];
         this.frames = 0;
@@ -65,10 +67,6 @@ class Game {
         this.song.play();
         this.guitar.play();
 
-        // setTimeout(() => {
-        //     this.song.currentTime = this.guitar.currentTime;
-        // }, 200);
-
         this.intervalId = setInterval(this.updateGame, 10);
 
     }    
@@ -89,7 +87,8 @@ class Game {
                     note.match = false; 
                     note.y = 0;
                     note.w = 20;
-                    note.h = 10;        
+                    note.h = 10; 
+                    note.matchDuration = 0;       
                     if(note.color === 'g') note.x = this.greenNoteStartPositionX;
                     if(note.color === 'r') note.x = this.redNoteStartPositionX;
                     if(note.color === 'y') note.x = this.yellowNoteStartPositionX;
@@ -159,89 +158,157 @@ class Game {
     }
 
     drawNote = (note) => {    
-        let matchGreen = false;
-        let matchRed = false;
-        let matchYellow = false;
-        let matchBlue = false;
-        let matchPink = false;
+        let matchGreen = 0;
+        let matchRed = 0;
+        let matchYellow = 0;
+        let matchBlue = 0;
+        let matchPink = 0;
 
         if (note.color === 'g') {
             if ((note.y + note.h) >= 430) {
-                matchGreen = this.checkMatch(this.greenBtnPress);
-
-                if(matchGreen) {
-                    if(note.match === false){
-                        note.match = true;
-                        this.matches++;
+                if(!note.match){
+                    matchGreen = this.checkMatch(this.greenBtnPress);
+                    note.match = matchGreen;
+                    if(note.match) this.matches++;
+                }else {
+                    note.matchDuration += 10;
+                    if (note.matchDuration < 200) {
+                        context.drawImage(this.match, 25, 265, 200, 200);
                     }
-                    context.drawImage(this.match, 25, 265, 200, 200);
-                }  
+                        
+                }
+                
+
+                // if(note.match) {
+                //     if(note.match === false){
+                //         note.match = true;
+                //         this.matches++;
+                //     }
+                //     context.drawImage(this.match, 25, 265, 200, 200);
+                // }  
             } else {
-                context.drawImage(this.greenNote, note.x, note.y, note.w, note.h);
+                if ((note.y + note.h) < 420) {
+                    context.drawImage(this.greenNote, note.x, note.y, note.w, note.h);
+                }
+                
             }        
         }
 
         if (note.color === 'r') {
             if ((note.y + note.h) >= 430) {
-                matchRed = this.checkMatch(this.redBtnPress);
-
-                if(matchRed) {
-                    if(note.match === false){
-                        note.match = true;
-                        this.matches++;
+                if(!note.match){
+                    matchRed = this.checkMatch(this.redBtnPress);
+                    note.match = matchRed;
+                    if(note.match) this.matches++;
+                }else {
+                    note.matchDuration += 10;
+                    if (note.matchDuration < 200) {
+                        context.drawImage(this.match, 165, 265, 200, 200);
                     }
-                    context.drawImage(this.match, 165, 265, 200, 200);
-                }  
+                }
+                    
+
+                // if(note.match) {
+                //     if(note.match === false){
+                //         note.match = true;
+                //         this.matches++;
+                //     }
+                //     context.drawImage(this.match, 165, 265, 200, 200);
+                // }  
             } else {
-                context.drawImage(this.redNote, note.x, note.y, note.w, note.h);
+                if ((note.y + note.h) < 420) {
+                    context.drawImage(this.redNote, note.x, note.y, note.w, note.h);
+                }
+                
             }       
         }
 
         if (note.color === 'y') {
             if ((note.y + note.h) >= 430) {
-                matchYellow = this.checkMatch(this.yellowBtnPress);
-
-                if(matchYellow) {
-                    if(note.match === false){
-                        note.match = true;
-                        this.matches++;
+                if(!note.match){
+                    matchYellow = this.checkMatch(this.yellowBtnPress);
+                    note.match = matchYellow;
+                    if(note.match) this.matches++;
+                }else {
+                    note.matchDuration += 10;
+                    if (note.matchDuration < 200) {
+                        context.drawImage(this.match, 305, 265, 200, 200);
                     }
-                    context.drawImage(this.match, 305, 265, 200, 200);
-                } 
+                }
+                
+
+                // if(note.match) {
+                //     if(note.match === false){
+                //         note.match = true;
+                //         this.matches++;
+                //     }
+                //     context.drawImage(this.match, 305, 265, 200, 200);
+                // } 
             } else {
-                context.drawImage(this.yellowNote, note.x, note.y, note.w, note.h);
+                if ((note.y + note.h) < 420) {
+                    context.drawImage(this.yellowNote, note.x, note.y, note.w, note.h);
+                }
+                
             }       
         }
 
         if (note.color === 'b') {
             if ((note.y + note.h) >= 430) {
-                matchBlue = this.checkMatch(this.blueBtnPress);
-
-                if(matchBlue) {
-                    if(note.match === false){
-                        note.match = true;
-                        this.matches++;
+                if(!note.match){
+                    matchBlue = this.checkMatch(this.blueBtnPress);
+                    note.match = matchBlue;
+                    if(note.match) this.matches++;
+                } else {
+                    note.matchDuration += 10;
+                    if (note.matchDuration < 200) {
+                        context.drawImage(this.match, 445, 265, 200, 200);
                     }
-                    context.drawImage(this.match, 445, 265, 200, 200);
-                } 
+                    
+                }
+                
+
+                // if(note.match) {
+                //     if(note.match === false){
+                //         note.match = true;
+                //         this.matches++;
+                //     }
+                //     context.drawImage(this.match, 445, 265, 200, 200);
+                // } 
             } else {
-                context.drawImage(this.blueNote, note.x, note.y, note.w, note.h);
+                if ((note.y + note.h) < 420) {
+                    context.drawImage(this.blueNote, note.x, note.y, note.w, note.h);
+                }
+                
             }           
         }
 
         if (note.color === 'p') { 
             if ((note.y + note.h) >= 430) {
-                matchPink = this.checkMatch(this.pinkBtnPress);
-
-                if(matchPink) {
-                    if(note.match === false){
-                        note.match = true;
-                        this.matches++;
+                if(!note.match){
+                    matchPink = this.checkMatch(this.pinkBtnPress);
+                    note.match = matchPink;
+                    if(note.match) this.matches++;
+                } else {
+                    note.matchDuration += 10;
+                    if (note.matchDuration < 200) {
+                        context.drawImage(this.match, 585, 265, 200, 200);
                     }
-                    context.drawImage(this.match, 585, 265, 200, 200);
-                } 
+                    
+                }
+                
+
+                // if(note.match) {
+                //     if(note.match === false){
+                //         note.match = true;
+                //         this.matches++;
+                //     }
+                //     context.drawImage(this.match, 585, 265, 200, 200);
+                // } 
             } else {
-                context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
+                if ((note.y + note.h) < 420) {
+                    context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
+                }
+                
             }             
         }       
 
@@ -249,15 +316,21 @@ class Game {
 
     checkMatch = (notePress) => {
         if(notePress && this.pick) {
-            if(this.frames % 100 === 0) {
-                this.guitar.volume = 1;
-                this.song.currentTime = this.frames/1000;
-                this.guitar.currentTime = this.frames/1000;
-            }
+            
+            this.guitar.volume = 1;
+            this.song.currentTime = this.frames/1000;
+            this.guitar.currentTime = this.frames/1000;
+
+            // if (this.frames % 100 === 0) {
+            //     this.guitar.volume = 1;
+            //     this.song.currentTime = this.frames/1000;
+            //     this.guitar.currentTime = this.frames/1000;
+            // }
             
             return true;
-        } else { 
-            if(this.frames % 700 === 0) {                
+        } else {                 
+
+            if(this.frames % 300 === 0) {                
                 this.guitar.volume = 0;
                 this.song.currentTime = this.frames/1000;
                 this.guitar.currentTime = this.frames/1000;
@@ -314,7 +387,7 @@ window.onload = () => {
             canvas.style.display = "flex";
             score.style.display = "flex";
 
-            const game = new Game(song, guitar, jsonNotes);
+            const game = new Game(song, guitar, jsonNotes, noteError);
             game.getNotes();
 
             document.addEventListener("keydown", (e) => {
