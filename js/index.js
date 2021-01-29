@@ -1,6 +1,6 @@
 const song = "../songs/song.ogg"
 const guitar = "../songs/guitar.ogg"
-const jsonNotes = "../songs/notesStart.json"
+const jsonNotes = "../songs/notes.json"
 
 const canvas = document.getElementById("gameArea");
 const context = canvas.getContext("2d");
@@ -13,6 +13,7 @@ class Game {
         this.notes = [];
         this.frames = 0;
         this.score = 0;
+        this.matches = 0;
         this.intervalId = 0;
 
         this.pick = false;
@@ -63,25 +64,13 @@ class Game {
 
         this.song.play();
         this.guitar.play();
+
+        // setTimeout(() => {
+        //     this.song.currentTime = this.guitar.currentTime;
+        // }, 200);
+
         this.intervalId = setInterval(this.updateGame, 10);
 
-        
-
-        // let loaded = 0;
-
-        // const sync = () => {
-
-        //     loaded++;
-            
-        //     if (loaded == 2) {
-        //         this.song.play();
-        //         this.guitar.play();
-        //         this.intervalId = setInterval(this.updateGame, 10);             
-        //     }
-        // }
-
-        // this.song.oncanplaythrough = sync();
-        // this.guitar.oncanplaythrough = sync();
     }    
 
     getNotes = () =>  {        
@@ -95,12 +84,19 @@ class Game {
         readJson()
         .then(notes => {
             notes.map(note => {
-                this.notes.push(note)                
-                if(note.color === 'g') note.x = this.greenNoteStartPositionX;
-                if(note.color === 'r') note.x = this.redNoteStartPositionX;
-                if(note.color === 'y') note.x = this.yellowNoteStartPositionX;
-                if(note.color === 'b') note.x = this.blueNoteStartPositionX;
-                if(note.color === 'p') note.x = this.pinkNoteStartPositionX;                
+                if (note.color === "g" || note.color === "r" || note.color === "y" || note.color === "b" || note.color === "p") {
+                    this.notes.push(note)
+                    note.match = false; 
+                    note.y = 0;
+                    note.w = 20;
+                    note.h = 10;        
+                    if(note.color === 'g') note.x = this.greenNoteStartPositionX;
+                    if(note.color === 'r') note.x = this.redNoteStartPositionX;
+                    if(note.color === 'y') note.x = this.yellowNoteStartPositionX;
+                    if(note.color === 'b') note.x = this.blueNoteStartPositionX;
+                    if(note.color === 'p') note.x = this.pinkNoteStartPositionX;
+
+                }                
             });
             console.log(notes);
             this.startGame();
@@ -170,10 +166,14 @@ class Game {
         let matchPink = false;
 
         if (note.color === 'g') {
-            if ((note.y + note.h) >= 440) {
+            if ((note.y + note.h) >= 420) {
                 matchGreen = this.checkMatch(this.greenBtnPress);
 
                 if(matchGreen) {
+                    if(note.match === false){
+                        note.match = true;
+                        this.matches++;
+                    }
                     context.drawImage(this.match, 25, 265, 200, 200);
                 }  
             } else {
@@ -182,10 +182,14 @@ class Game {
         }
 
         if (note.color === 'r') {
-            if ((note.y + note.h) >= 440) {
+            if ((note.y + note.h) >= 420) {
                 matchRed = this.checkMatch(this.redBtnPress);
 
                 if(matchRed) {
+                    if(note.match === false){
+                        note.match = true;
+                        this.matches++;
+                    }
                     context.drawImage(this.match, 165, 265, 200, 200);
                 }  
             } else {
@@ -194,10 +198,14 @@ class Game {
         }
 
         if (note.color === 'y') {
-            if ((note.y + note.h) >= 440) {
+            if ((note.y + note.h) >= 420) {
                 matchYellow = this.checkMatch(this.yellowBtnPress);
 
                 if(matchYellow) {
+                    if(note.match === false){
+                        note.match = true;
+                        this.matches++;
+                    }
                     context.drawImage(this.match, 305, 265, 200, 200);
                 } 
             } else {
@@ -206,10 +214,14 @@ class Game {
         }
 
         if (note.color === 'b') {
-            if ((note.y + note.h) >= 440) {
+            if ((note.y + note.h) >= 420) {
                 matchBlue = this.checkMatch(this.blueBtnPress);
 
                 if(matchBlue) {
+                    if(note.match === false){
+                        note.match = true;
+                        this.matches++;
+                    }
                     context.drawImage(this.match, 445, 265, 200, 200);
                 } 
             } else {
@@ -218,37 +230,35 @@ class Game {
         }
 
         if (note.color === 'p') { 
-            if ((note.y + note.h) >= 440) {
+            if ((note.y + note.h) >= 420) {
                 matchPink = this.checkMatch(this.pinkBtnPress);
 
                 if(matchPink) {
+                    if(note.match === false){
+                        note.match = true;
+                        this.matches++;
+                    }
                     context.drawImage(this.match, 585, 265, 200, 200);
                 } 
             } else {
                 context.drawImage(this.pinkNote, note.x, note.y, note.w, note.h);
             }             
-        }
-
-        // if(this.frames % 100 === 0) {
-        //     if(matchGreen || matchRed || matchYellow || matchBlue || matchPink){
-        //         this.guitar.volume = 1;
-        //     } else {
-        //         this.guitar.volume = 0;
-        //     }
-        // }        
+        }       
 
     }
 
     checkMatch = (notePress) => {
         if(notePress && this.pick) {
-            if(this.frames % 500 === 0) {
+            if(this.frames % 100 === 0) {
                 this.guitar.volume = 1;
+                this.song.currentTime = this.guitar.currentTime;
             }
             
             return true;
         } else { 
-            if(this.frames % 500 === 0) {
+            if(this.frames % 700 === 0) {                
                 this.guitar.volume = 0;
+                this.song.currentTime = this.guitar.currentTime;
             }                       
             return false;
         }
@@ -260,22 +270,26 @@ class Game {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-
-    sync = () => {
-        if (this.frames === 500) {
-            this.guitar.currentTime = this.song.currentTime;
+    updateScore = () => {
+        const oldScore = this.score;        
+        this.score = this.matches * (100 / this.notes.length);
+        
+        if(this.score != oldScore) {
+            if(this.score > 100) {
+                this.score = 100;
+            }
+            const spanScore = document.getElementById("spanScore");
+            spanScore.innerText = `${this.score.toFixed()} %` 
         }
+
     }
 
     updateGame = () =>  {
         this.frames += 10;
-        this.sync();
         this.clear();  
         this.drawFrets();  
         this.updateNotes();
-        
-        // this.updateScore();
-        // this.checkGameEnd();
+        this.updateScore();
     }    
     
 }
@@ -283,66 +297,81 @@ class Game {
 window.onload = () => {
     
     document.getElementById("startBtn").onclick = () => {
+        const body = document.querySelector("body");
         const welcomeScreen = document.getElementById("welcomeScreen");
-        welcomeScreen.style.display = "none";        
-        canvas.style.display = "block";
-
-        const game = new Game(song, guitar, jsonNotes);
-        game.getNotes();
-
-        document.addEventListener("keydown", (e) => {
-            e.preventDefault();
-            switch (e.key) {
-                case "F1":
-                    game.greenBtnPress = true;
-                    break;
-                case "F2":
-                    game.redBtnPress = true;
-                    break;
-                case "F3":
-                    game.yellowBtnPress = true;
-                    break;
-                case "F4":
-                    game.blueBtnPress = true;
-                    break;
-                case "F5":
-                    game.pinkBtnPress = true;
-                    break;
-                case "Enter":
-                    game.pick = true;
-                    break;
-                case "Escape":
-                    console.log("Escape");
-                    break;
-            }
-          });
+        const startBtn = document.getElementById("startBtn");
+        const score = document.getElementById("divScore");
+        startBtn.style.display = "none"; 
+        welcomeScreen.style.backgroundImage = "URL('../images/controls.png')"
         
-          document.addEventListener("keyup", (e) => {
-            e.preventDefault();
-            switch (e.key) {
-                case "F1":
-                    game.greenBtnPress = false;
-                    break;
-                case "F2":
-                    game.redBtnPress = false;
-                    break;
-                case "F3":
-                    game.yellowBtnPress = false;
-                    break;
-                case "F4":
-                    game.blueBtnPress = false;
-                    break;
-                case "F5":
-                    game.pinkBtnPress = false;
-                    break;
-                case "Enter":
-                    game.pick = false;
-                    break;
-                case "Escape":
-                    console.log("Escape");
-                    break;
-            }
-          });
+        setTimeout(() => {
+            welcomeScreen.style.display = "none";
+            body.style.backgroundImage = "url('../images/gameBack.jpg')";
+            body.backgroundSize = "cover";
+            body.backgroundRepeat = "no-repeat";       
+            canvas.style.display = "flex";
+            score.style.display = "flex";
+
+            const game = new Game(song, guitar, jsonNotes);
+            game.getNotes();
+
+            document.addEventListener("keydown", (e) => {
+                e.preventDefault();
+                switch (e.key) {
+                    case "F1":
+                        game.greenBtnPress = true;
+                        break;
+                    case "F2":
+                        game.redBtnPress = true;
+                        break;
+                    case "F3":
+                        game.yellowBtnPress = true;
+                        break;
+                    case "F4":
+                        game.blueBtnPress = true;
+                        break;
+                    case "F5":
+                        game.pinkBtnPress = true;
+                        break;
+                    case "Enter":
+                        game.pick = true;
+                        break;
+                    case "Escape":
+                        console.log("Escape");
+                        break;
+                }
+              });
+            
+              document.addEventListener("keyup", (e) => {
+                e.preventDefault();
+                switch (e.key) {
+                    case "F1":
+                        game.greenBtnPress = false;
+                        break;
+                    case "F2":
+                        game.redBtnPress = false;
+                        break;
+                    case "F3":
+                        game.yellowBtnPress = false;
+                        break;
+                    case "F4":
+                        game.blueBtnPress = false;
+                        break;
+                    case "F5":
+                        game.pinkBtnPress = false;
+                        break;
+                    case "Enter":
+                        game.pick = false;
+                        break;
+                    case "Escape":
+                        console.log("Escape");
+                        break;
+                }
+              });
+
+        }, 3000);       
+
+        
     }
     
 }
