@@ -1,6 +1,6 @@
-const song = "../songs/song.ogg"
-const guitar = "../songs/guitar.ogg"
-const jsonNotes = "../songs/notes.json"
+const song = "./songs/song.ogg"
+const guitar = "./songs/guitar.ogg"
+const jsonNotes = "./songs/notes.json"
 
 const canvas = document.getElementById("gameArea");
 const context = canvas.getContext("2d");
@@ -19,17 +19,17 @@ class Game {
         this.pick = false;
         
         this.whiteBtn = new Image();
-        this.whiteBtn.src = "../images/whiteBtn.png";
+        this.whiteBtn.src = "./images/whiteBtn.png";
         this.greenBtn = new Image();
-        this.greenBtn.src = "../images/greenBtn.png";
+        this.greenBtn.src = "./images/greenBtn.png";
         this.redBtn = new Image();
-        this.redBtn.src = "../images/redBtn.png";        
+        this.redBtn.src = "./images/redBtn.png";        
         this.yellowBtn = new Image();
-        this.yellowBtn.src = "../images/yellowBtn.png";
+        this.yellowBtn.src = "./images/yellowBtn.png";
         this.blueBtn = new Image();
-        this.blueBtn.src = "../images/blueBtn.png";
+        this.blueBtn.src = "./images/blueBtn.png";
         this.pinkBtn = new Image();
-        this.pinkBtn.src = "../images/pinkBtn.png";
+        this.pinkBtn.src = "./images/pinkBtn.png";
         
         this.greenBtnPress = false;
         this.redBtnPress = false;
@@ -38,15 +38,15 @@ class Game {
         this.pinkBtnPress = false;        
 
         this.greenNote = new Image();
-        this.greenNote.src = "../images/greenNote.png";
+        this.greenNote.src = "./images/greenNote.png";
         this.redNote = new Image();
-        this.redNote.src = "../images/redNote.png";        
+        this.redNote.src = "./images/redNote.png";        
         this.yellowNote = new Image();
-        this.yellowNote.src = "../images/yellowNote.png";
+        this.yellowNote.src = "./images/yellowNote.png";
         this.blueNote = new Image();
-        this.blueNote.src = "../images/blueNote.png";
+        this.blueNote.src = "./images/blueNote.png";
         this.pinkNote = new Image();
-        this.pinkNote.src = "../images/pinkNote.png";        
+        this.pinkNote.src = "./images/pinkNote.png";        
                 
         this.greenNoteStartPositionX = 340;
         this.redNoteStartPositionX = 365;      
@@ -55,7 +55,7 @@ class Game {
         this.pinkNoteStartPositionX = 440;
 
         this.match = new Image();
-        this.match.src = "../images/match.png"; 
+        this.match.src = "./images/match.png"; 
 
     }
 
@@ -98,7 +98,6 @@ class Game {
 
                 }                
             });
-            console.log(notes);
             this.startGame();
         }) 
         .catch(error => console.log(error));    
@@ -130,25 +129,26 @@ class Game {
             this.notes[i].time -= 0.01;
 
             if (this.notes[i].time <= 4.2 && this.notes[i].time > -1) {
-                this.notes[i].y += 0.952;
-                this.notes[i].w += 0.1;
-                this.notes[i].h += 0.05;
+                
+                this.notes[i].y += 0.96; //952
+                this.notes[i].w += 0.1;   
+                this.notes[i].h += 0.05;  
 
                 if (this.notes[i].color === 'g') {
-                    this.notes[i].x -= 0.57;
+                    this.notes[i].x -= 0.57;  
                 }
                 if (this.notes[i].color === 'r') {
-                    this.notes[i].x -= 0.31;
+                    this.notes[i].x -= 0.31;  
                 }
                 if (this.notes[i].color === 'y') {
-                    this.notes[i].x -= 0.05;
+                    this.notes[i].x -= 0.05;  
                 }
                 if (this.notes[i].color === 'b') {
-                    this.notes[i].x += 0.23;
+                    this.notes[i].x += 0.22;  
                 }
                 if (this.notes[i].color === 'p') {
-                    this.notes[i].x += 0.48;
-                }
+                    this.notes[i].x += 0.48;  
+                }                               
                 
                 this.drawNote(this.notes[i]);
                 
@@ -166,7 +166,7 @@ class Game {
         let matchPink = false;
 
         if (note.color === 'g') {
-            if ((note.y + note.h) >= 420) {
+            if ((note.y + note.h) >= 430) {
                 matchGreen = this.checkMatch(this.greenBtnPress);
 
                 if(matchGreen) {
@@ -182,7 +182,7 @@ class Game {
         }
 
         if (note.color === 'r') {
-            if ((note.y + note.h) >= 420) {
+            if ((note.y + note.h) >= 430) {
                 matchRed = this.checkMatch(this.redBtnPress);
 
                 if(matchRed) {
@@ -198,7 +198,7 @@ class Game {
         }
 
         if (note.color === 'y') {
-            if ((note.y + note.h) >= 420) {
+            if ((note.y + note.h) >= 430) {
                 matchYellow = this.checkMatch(this.yellowBtnPress);
 
                 if(matchYellow) {
@@ -214,7 +214,7 @@ class Game {
         }
 
         if (note.color === 'b') {
-            if ((note.y + note.h) >= 420) {
+            if ((note.y + note.h) >= 430) {
                 matchBlue = this.checkMatch(this.blueBtnPress);
 
                 if(matchBlue) {
@@ -230,7 +230,7 @@ class Game {
         }
 
         if (note.color === 'p') { 
-            if ((note.y + note.h) >= 420) {
+            if ((note.y + note.h) >= 430) {
                 matchPink = this.checkMatch(this.pinkBtnPress);
 
                 if(matchPink) {
@@ -251,14 +251,16 @@ class Game {
         if(notePress && this.pick) {
             if(this.frames % 100 === 0) {
                 this.guitar.volume = 1;
-                this.song.currentTime = this.guitar.currentTime;
+                this.song.currentTime = this.frames/1000;
+                this.guitar.currentTime = this.frames/1000;
             }
             
             return true;
         } else { 
             if(this.frames % 700 === 0) {                
                 this.guitar.volume = 0;
-                this.song.currentTime = this.guitar.currentTime;
+                this.song.currentTime = this.frames/1000;
+                this.guitar.currentTime = this.frames/1000;
             }                       
             return false;
         }
@@ -302,11 +304,11 @@ window.onload = () => {
         const startBtn = document.getElementById("startBtn");
         const score = document.getElementById("divScore");
         startBtn.style.display = "none"; 
-        welcomeScreen.style.backgroundImage = "URL('../images/controls.png')"
+        welcomeScreen.style.backgroundImage = "URL('./images/controls.png')"
         
         setTimeout(() => {
             welcomeScreen.style.display = "none";
-            body.style.backgroundImage = "url('../images/gameBack.jpg')";
+            body.style.backgroundImage = "url('./images/gameBack.jpg')";
             body.backgroundSize = "cover";
             body.backgroundRepeat = "no-repeat";       
             canvas.style.display = "flex";
@@ -331,6 +333,21 @@ window.onload = () => {
                         game.blueBtnPress = true;
                         break;
                     case "F5":
+                        game.pinkBtnPress = true;
+                        break;
+                    case "a":
+                        game.greenBtnPress = true;
+                        break;
+                    case "s":
+                        game.redBtnPress = true;
+                        break;
+                    case "d":
+                        game.yellowBtnPress = true;
+                        break;
+                    case "f":
+                        game.blueBtnPress = true;
+                        break;
+                    case "g":
                         game.pinkBtnPress = true;
                         break;
                     case "Enter":
@@ -358,6 +375,21 @@ window.onload = () => {
                         game.blueBtnPress = false;
                         break;
                     case "F5":
+                        game.pinkBtnPress = false;
+                        break;
+                    case "a":
+                        game.greenBtnPress = false;
+                        break;
+                    case "s":
+                        game.redBtnPress = false;
+                        break;
+                    case "d":
+                        game.yellowBtnPress = false;
+                        break;
+                    case "f":
+                        game.blueBtnPress = false;
+                        break;
+                    case "g":
                         game.pinkBtnPress = false;
                         break;
                     case "Enter":
